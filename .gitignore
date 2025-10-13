@@ -1,0 +1,19 @@
+# Binaries
+*.exe
+*.out
+*.test
+
+# Vendor (optional)
+vendor/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# GoLand IDE
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
