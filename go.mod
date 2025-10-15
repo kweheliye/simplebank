@@ -6,7 +6,6 @@ require (
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	github.com/techschool/simplebank v0.0.0-20250420075428-97f000fe58ad
 )
 
 require (
