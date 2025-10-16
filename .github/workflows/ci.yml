@@ -12,16 +12,14 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: '1.25'
-      - run: go mod tidy
-      - run: go build ./...
 
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v4
 
       - name: Test
         run: go test -v -cover ./...
