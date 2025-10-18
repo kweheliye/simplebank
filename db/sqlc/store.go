@@ -22,23 +22,26 @@ type TransferTxResult struct {
 	FromEntry   Entry    `json:"from_entry"`
 	ToEntry     Entry    `json:"to_entry"`
 }
+type Store interface {
+	Querier
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
+}
 
-// SQLStore provides all functions to execute SQL queries and transactions
-type Store struct {
+type SQLStore struct {
 	connPool *pgxpool.Pool
 	*Queries
 }
 
 // NewStore creates a new store
-func NewStore(connPool *pgxpool.Pool) *Store {
-	return &Store{
+func NewStore(connPool *pgxpool.Pool) Store {
+	return &SQLStore{
 		connPool: connPool,
 		Queries:  New(connPool),
 	}
 }
 
 // ExecTx executes a function within a database transaction
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.connPool.Begin(ctx)
 	if err != nil {
 		return err
@@ -55,7 +58,7 @@ func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
 	return tx.Commit(ctx)
 }
 
-func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
