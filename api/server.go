@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 
 	db "github.com/kamalweheliye/simplebank/db/sqlc"
 	"github.com/kamalweheliye/simplebank/util"
@@ -18,9 +19,12 @@ func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
+	binding.Validator.Engine()
+
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccounts)
+	router.POST("/transfers", server.createTransfer)
 
 	server.router = router
 	return server
