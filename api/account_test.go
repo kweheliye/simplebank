@@ -10,7 +10,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	mockdb "github.com/kamalweheliye/simplebank/db/mock/db/mock"
+	mockdb "github.com/kamalweheliye/simplebank/db/mock"
 	db "github.com/kamalweheliye/simplebank/db/sqlc"
 	"github.com/kamalweheliye/simplebank/util"
 	"github.com/stretchr/testify/require"
