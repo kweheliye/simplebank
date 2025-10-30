@@ -19,11 +19,11 @@ func TestJWTMaker(t *testing.T) {
 	issuedAt := time.Now()
 	expiredAt := issuedAt.Add(duration)
 
-	token, err := maker.CreateToken(username, duration, TokenTypeAccessToken)
+	token, payload, err := maker.CreateToken(username, duration, TokenTypeAccessToken)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 
-	payload, err := maker.VerifyToken(token, TokenTypeAccessToken)
+	payload, err = maker.VerifyToken(token, TokenTypeAccessToken)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 
@@ -37,11 +37,11 @@ func TestExpiredJWTToken(t *testing.T) {
 	maker, err := NewJWTMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	token, err := maker.CreateToken(util.RandomOwner(), -time.Minute, TokenTypeAccessToken)
+	token, payload, err := maker.CreateToken(util.RandomOwner(), -time.Minute, TokenTypeAccessToken)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 
-	payload, err := maker.VerifyToken(token, TokenTypeAccessToken)
+	payload, err = maker.VerifyToken(token, TokenTypeAccessToken)
 	require.Error(t, err)
 	require.EqualError(t, err, ErrExpiredToken.Error())
 	require.Nil(t, payload)
@@ -68,11 +68,11 @@ func TestJWTWrongTokenType(t *testing.T) {
 	maker, err := NewJWTMaker(util.RandomString(32))
 	require.NoError(t, err)
 
-	token, err := maker.CreateToken(util.RandomOwner(), time.Minute, TokenTypeAccessToken)
+	token, payload, err := maker.CreateToken(util.RandomOwner(), time.Minute, TokenTypeAccessToken)
 	require.NoError(t, err)
 	require.NotEmpty(t, token)
 
-	payload, err := maker.VerifyToken(token, TokenTypeRefreshToken)
+	payload, err = maker.VerifyToken(token, TokenTypeRefreshToken)
 	require.Error(t, err)
 	require.EqualError(t, err, ErrInvalidToken.Error())
 	require.Nil(t, payload)

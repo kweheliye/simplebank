@@ -29,14 +29,14 @@ func NewPasetoMaker(symmetricKey string) (Maker, error) {
 }
 
 // CreateToken creates a new token for a specific username and duration
-func (maker *PasetoMaker) CreateToken(username string, duration time.Duration, tokenType TokenType) (string, error) {
+func (maker *PasetoMaker) CreateToken(username string, duration time.Duration, tokenType TokenType) (string, *Payload, error) {
 	payload, err := NewPayload(username, duration, tokenType)
 	if err != nil {
-		return "", err
+		return "", payload, err
 	}
 
 	token, err := maker.paseto.Encrypt(maker.symmetricKey, payload, nil)
-	return token, err
+	return token, payload, err
 }
 
 // VerifyToken checks if the token is valid or not
